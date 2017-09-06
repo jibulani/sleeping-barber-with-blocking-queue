@@ -5,28 +5,18 @@ package com.qiwi.sleeping.barber.queue;
  */
 public class Customer extends Thread {
 
-    private Barber barber;
+    BarberShop barberShop;
 
-    public Customer(Barber barber) {
-        super();
-        this.barber = barber;
+    public Customer(BarberShop barberShop) {
+        this.barberShop = barberShop;
     }
 
     @Override
     public void run() {
-        if (barber.increaseCustomers(this)) {
-            System.out.println("Customer added in queue");
-            do {
-                if (Thread.interrupted()) {
-                    if (barber.decreaseCustomers(this)) {
-                        System.out.println("Customer go out");
-                    }
-                    return;
-                }
-            } while (true);
+        if (barberShop.getQueueSize() < 10) {
+            barberShop.addToQueue(this);
         } else {
-            System.out.println("No free chairs, customer go out");
+            System.out.println("No place in barbershop");
         }
-
     }
 }
